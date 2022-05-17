@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Products</title>
+    <!-- Bootstrap core CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container mt-3">
+      <table class="table table-dark">
+        <thead>
+          <th>Product Category</th>
+          <th>Product Brand</th>
+          <th>Product Description</th>
+          <th>Image URL</th>
+          <th>Price</th>
+          <th>Product Title</th>
+        </thead>
+        <tbody id="tbody1"></tbody>
+      </table>
+    </div>
+    <div class="d-grid gap-2 col-6 mx-auto">
+      <a href="add-products.html" class="btn btn-primary">Go to add product page</a>
+      
+    </div>
+
+    <script type="module">
+      // -------------------FILLING THE TABLE-----------------
+
+      var tbody = document.getElementById("tbody1");
+      function addItemToTable(categ, brand, desc, imageUrl, price, title) {
+        let trow = document.createElement("tr");
+        let td1 = document.createElement("td");
+        let td2 = document.createElement("td");
+        let td3 = document.createElement("td");
+        let td4 = document.createElement("td");
+        let td5 = document.createElement("td");
+        let td6 = document.createElement("td");
+
+        td1.innerHTML = categ;
+        td2.innerHTML = brand;
+        td3.innerHTML = desc;
+        td4.innerHTML = imageUrl;
+        td5.innerHTML = price;
+        td6.innerHTML = title;
+
+        trow.appendChild(td1);
+        trow.appendChild(td2);
+        trow.appendChild(td3);
+        trow.appendChild(td4);
+        trow.appendChild(td5);
+        trow.appendChild(td6);
+
+        tbody.appendChild(trow);
+      }
+      function addAllItemsToTable(products) {
+        products.forEach((element) => {
+          console.log(element);
+          addItemToTable(
+            element.categ,
+            element.brand,
+            element.desc,
+            element.image,
+            element.price,
+            element.title
+          );
+        });
+      }
+
+      // Import the functions you need from the SDKs you need
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-analytics.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyCblxovXXxWD3V0GQqYH-7AOx94Wc5aOws",
+        authDomain: "techworld-69698.firebaseapp.com",
+        databaseURL: "https://techworld-69698-default-rtdb.firebaseio.com",
+        projectId: "techworld-69698",
+        storageBucket: "techworld-69698.appspot.com",
+        messagingSenderId: "928161624990",
+        appId: "1:928161624990:web:0b5df66b4ecae6246d9c8f",
+        measurementId: "G-MS2KGE2J62",
+      };
+
+      // Initialize Firebase
+
+      const app = initializeApp(firebaseConfig);
+      // const analytics = getAnalytics(app);
+      import {
+        getDatabase,
+        ref,
+        child,
+        onValue,
+        get,
+      } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js";
+
+      const db = getDatabase();
+
+      //   ------------GETTING ALL DATA---------------
+      function getAllDataOnce() {
+        const dbRef = ref(db);
+
+        get(child(dbRef, "products/cameras")).then((snapshot) => {
+          var products = [];
+
+          snapshot.forEach((childSnapshot) => {
+            products.push(childSnapshot.val());
+          });
+
+          addAllItemsToTable(products);
+        });
+      }
+      function getAllDataRealTime() {
+        const dbRef1 = ref(db, "products/cameras");
+        const dbRef2 = ref(db, "products/laptops");
+        const dbRef3 = ref(db, "products/tablets");
+        const dbRef4 = ref(db, "products/mobile");
+
+        onValue(dbRef1, (snapshot) => {
+          var products = [];
+
+          snapshot.forEach((childSnapshot) => {
+            products.push(childSnapshot.val());
+          });
+
+          addAllItemsToTable(products);
+        });
+        onValue(dbRef2, (snapshot) => {
+          var products = [];
+
+          snapshot.forEach((childSnapshot) => {
+            products.push(childSnapshot.val());
+          });
+
+          addAllItemsToTable(products);
+        });
+        onValue(dbRef3, (snapshot) => {
+          var products = [];
+
+          snapshot.forEach((childSnapshot) => {
+            products.push(childSnapshot.val());
+          });
+
+          addAllItemsToTable(products);
+        });
+        onValue(dbRef4, (snapshot) => {
+          var products = [];
+
+          snapshot.forEach((childSnapshot) => {
+            products.push(childSnapshot.val());
+          });
+
+          addAllItemsToTable(products);
+        });
+      }
+
+      window.onload = getAllDataRealTime();
+
+      //   -----------------------GETTING DATA REALTIME--------------------
+      //        function getAllDataRealTime() {
+      //          const dbRef = ref(db, "products");
+
+      //       onValue(dbRef, (snapshot)=>{
+      //          var products = [];
+      //          snapshot.forEach((childSnapshot) => {
+      //    products.push(childSnapshot.val());
+      //  });
+
+      //  addAllItemsToTable(products);
+      //  });
+
+      //            addAllItemsToTable(products);
+      //          });
+      //        }
+    </script>
+  </body>
+</html>

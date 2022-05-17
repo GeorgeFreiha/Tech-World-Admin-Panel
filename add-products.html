@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Products</title>
+     <!-- Bootstrap core CSS -->
+     <link
+     href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+     rel="stylesheet"
+     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+     crossorigin="anonymous"
+   />
+
+  </head>
+  <body>
+    <!-- <style>
+      label {
+        display: inline-block;
+        width: 80px;
+      }
+      input, select{
+          width: 120px;
+      }
+    </style> -->
+
+<div class="mb-3">
+  <label for="exampleFormControlInput1" class="form-label">Product Category</label>
+  <input type="text" class="form-control" id="productCategory" placeholder="enter the category">
+</div>
+<label for="exampleFormControlInput1" class="form-label">Product Brand</label>
+<input type="text" class="form-control" id="productBrand" placeholder="enter product brand">
+</div>
+<div class="mb-3" style="margin-top:10px ;">
+  <label for="exampleFormControlTextarea1" class="form-label">Product Description</label>
+  <textarea class="form-control" id="productDescription" rows="3"></textarea>
+</div>
+<div class="mb-3">
+  <label for="exampleFormControlInput1" class="form-label">Image URL</label>
+  <input type="text" class="form-control" id="imageUrl" placeholder="enter image url">
+</div>
+<div class="mb-3">
+  <label for="exampleFormControlInput1" class="form-label">Price</label>
+  <input type="text" class="form-control" id="productPrice" placeholder="enter the price">
+</div>
+
+<div class="mb-3">
+  <label for="exampleFormControlInput1" class="form-label">Title</label>
+  <input type="text" class="form-control" id="productTitle" placeholder="enter the title">
+</div>
+
+<div class="d-grid gap-2 col-6 mx-auto">
+  <button class="btn btn-primary" type="submit" id="insBtn">Add Product</button>
+  <button class="btn btn-success" type="submit" id="updBtn">Update/Modify Product</button>
+  <button class="btn btn-danger" type="submit" id="delBtn">Delete Product</button>
+  
+  
+</div>
+<style>
+  body{
+    text-align: center;
+  }
+  .form-control{
+     margin-left:50px ;
+     margin-right: 50px;
+  }
+</style>
+
+
+
+
+    <!-- <label>Product ID: </label>
+    <input type="text" name="productID" id="Namebox" />
+    <label>Product Type: </label>
+    <input type="text" name="productType" id="Rollbox" />
+    <label>Product Brand: </label>
+    <input type="text" name="productBrand" id="Secbox" />
+    <hr />
+
+    <button type="submit" id="Insbtn">Insert</button>
+    <button type="submit" id="Selbtn">Select</button>
+
+    <button type="submit" id="Updbtn">Update</button>
+
+    <button type="submit" id="Delbtn">Delete</button> -->
+  </body>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyCblxovXXxWD3V0GQqYH-7AOx94Wc5aOws",
+      authDomain: "techworld-69698.firebaseapp.com",
+      databaseURL: "https://techworld-69698-default-rtdb.firebaseio.com",
+      projectId: "techworld-69698",
+      storageBucket: "techworld-69698.appspot.com",
+      messagingSenderId: "928161624990",
+      appId: "1:928161624990:web:3446d5e084f9c3026d9c8f",
+      measurementId: "G-RVTHH9BHZP",
+    };
+
+    // Initialize Firebase
+
+    const app = initializeApp(firebaseConfig);
+    // const analytics = getAnalytics(app);
+
+    import {
+      getDatabase,
+      ref,
+      set,
+      get,
+      child,
+      update,
+      remove,
+    } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js";
+
+    const db = getDatabase();
+
+    // -----------References------
+    var productCateg = document.getElementById("productCategory");
+    var productBrand = document.getElementById("productBrand");
+    var productDescription = document.getElementById("productDescription");
+    var imageUrl = document.getElementById("imageUrl");
+    var productPrice = document.getElementById("productPrice");
+    var productTitle = document.getElementById("productTitle");
+
+    var insBtn = document.getElementById("insBtn");
+    // var selBtn = document.getElementById("Selbtn");
+    var updBtn = document.getElementById("updBtn");
+    var delBtn = document.getElementById("delBtn");
+
+    // ---------------------INSERT DATA-------------
+
+    function insertData() {
+      set(ref(db, "products/" + productCateg.value +"/"+ productBrand.value ), {
+        categ: productCateg.value,
+        brand: productBrand.value,
+        desc: productDescription.value,
+        image: imageUrl.value,
+        price: productPrice.value,
+        title: productTitle.value,
+
+
+      })
+        .then(() => {
+          alert("Data Stored Successfully");
+        })
+        .catch((error) => {
+          alert("unsuccessful, error" + error);
+        });
+    }
+    // -------------SELECT DATA FUNCTION--------------
+
+    function selectData() {
+      const dbref = ref(db);
+      get(child(dbref, "{Products/" + rollbox.value))
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            namebox.value = snapshot.val().ProductID;
+            rollbox.value = snapshot.val().ProductCateg;
+            sexbox.value = snapshot.val().ProductBrand;
+          } else {
+            alert("No Data Found");
+          }
+        })
+        .catch((error) => {
+          alert("unsuccessful, error" + error);
+        });
+    }
+    // ---------------UPDATE DATA FUNCTION-----------
+
+    function updateData() {
+      update(ref(db, "products/" + productCateg.value +"/"+ productBrand.value), {
+        categ: productCateg.value,
+        brand: productBrand.value,
+        desc: productDescription.value,
+        image: imageUrl.value,
+        price: productPrice.value,
+        title: productTitle.value,
+
+      })
+        .then(() => {
+          alert("Data Updated Successfully");
+        })
+        .catch((error) => {
+          alert("unsuccessful, error" + error);
+        });
+    }
+
+    // --------------Delete Data Function----------
+
+    function deleteData() {
+      remove(ref(db, "products/" + productCateg.value +"/"+ productBrand.value))
+        .then(() => {
+          alert("Data removed Successfully");
+        })
+        .catch((error) => {
+          alert("unsuccessful, error" + error);
+        });
+    }
+
+    // --------------------Assign Events to Buttons----------------
+
+    insBtn.addEventListener("click", insertData);
+    delBtn.addEventListener("click", deleteData);
+    updBtn.addEventListener("click", updateData);
+    // selBtn.addEventListener("click", selectData);
+    // updBtn.addEventListener("click", updateData);
+    // delBtn.addEventListener("click", deleteData);
+  </script>
+</html>
